@@ -13,6 +13,7 @@ RUN apt-get update && \
     libgl1-mesa-dev \
     libegl1-mesa-dev \
     libx11-dev \
+    parallel \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Miniconda
@@ -23,9 +24,13 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -
 # Add conda to the PATH
 ENV PATH="/opt/conda/bin:${PATH}"
 
+ARG PROJECTS_DIR=/home/code
+
+RUN mkdir -p {PROJECTS_DIR}
+
 # Clone repo before setting up the environment
-WORKDIR /
-RUN git clone --branch stable https://github.com/facebookresearch/habitat-sim.git
+RUN cd ${PROJECTS_DIR} &&\
+    git clone --branch stable https://github.com/facebookresearch/habitat-sim.git
 
 # Accept Conda ToS, then create the environment in a single RUN command
 RUN conda config --set always_yes true && \
@@ -44,13 +49,16 @@ RUN pip install -U pip
 RUN which cmake && cmake --version \ 
     pip install opencv-python tqdm && \
     conda install pytorch -c pytorch -y && \
-    cd /habitat-sim && \
+    cd ${PROJECTS_DIR}/habitat-sim && \
     pip install -r requirements.txt && \
     python setup.py install --headless
 
 # Set the default working directory and command for when the container starts
 WORKDIR /habitat-sim
 CMD ["/bin/bash"]
+
+# conda install -c conda-forge opencv   
+# conda install -c conda-forge numpy=1.26.4   
     
 
 # Run this code inside the docker
