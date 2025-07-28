@@ -26,7 +26,7 @@ ENV PATH="/opt/conda/bin:${PATH}"
 
 ARG PROJECTS_DIR=/home/code
 
-RUN mkdir -p {PROJECTS_DIR}
+RUN mkdir -p ${PROJECTS_DIR}
 
 # Clone repo before setting up the environment
 RUN cd ${PROJECTS_DIR} &&\
