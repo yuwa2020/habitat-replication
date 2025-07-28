@@ -1,0 +1,86 @@
+## Steps to reproduce synthetic training data using the Habitat-Sim simulator
+
+### Create a conda environment
+```bash
+conda create -n habitat python=3.8 habitat-sim=0.2.1 headless=2.0 -c aihabitat -c conda-forge
+conda active habitat
+conda install pytorch -c pytorch
+pip install opencv-python tqdm
+```
+
+
+-> Didn't work: this error
+```
+DISPLAY not detected. For headless systems, compile with --headless for EGL support
+```
+
+
+or (if you get the error `For headless systems, compile with --headless for EGL support`)
+```
+git clone --branch stable https://github.com/facebookresearch/habitat-sim.git
+cd habitat-sim
+
+conda create -n habitat python=3.9 cmake=3.14.0
+conda activate habitat
+pip install . -v
+conda install pytorch -c pytorch
+pip install opencv-python tqdm
+
+
+this error: 
+61.30     File "/opt/conda/envs/habitat/lib/python3.9/subprocess.py", line 373, in check_call
+61.30       raise CalledProcessError(retcode, cmd)
+61.30   subprocess.CalledProcessError: Command '['/tmp/pip-build-env-fzbejk7x/overlay/lib/python3.9/site-packages/cmake/data/bin/cmake', '-DBUILD_PYTHON_BINDINGS=ON', '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/home/code/habitat-sim/build/lib.linux-x86_64-cpython-39/habitat_sim/_ext', '-DPYTHON_EXECUTABLE=/opt/conda/envs/habitat/bin/python3.9', '-DCMAKE_EXPORT_COMPILE_COMMANDS=OFF', '-DREL_BUILD_RPATH=ON', '-DCMAKE_BUILD_TYPE=RelWithDebInfo', '-GNinja', '-DBUILD_GUI_VIEWERS=OFF', '-DBUILD_TEST=OFF', '-DBUILD_WITH_BULLET=ON', '-DBUILD_WITH_CUDA=OFF', '-DBUILD_BASIS_COMPRESSOR=OFF', '-DBUILD_WITH_AUDIO=OFF', '/home/code/habitat-sim/src']' returned non-zero exit status 1.
+61.30   error: subprocess-exited-with-error
+61.30   
+61.30   × Building wheel for habitat_sim (pyproject.toml) did not run successfully.
+61.30   │ exit code: 1
+61.30   ╰─> See above for output.
+61.30   
+61.30   note: This error originates from a subprocess, and is likely not a problem with pip.
+61.30   full command: /opt/conda/envs/habitat/bin/python3.9 /opt/conda/envs/habitat/lib/python3.9/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py build_wheel /tmp/tmp1tx70mvh
+61.30   cwd: /home/code/habitat-sim
+61.30   ERROR: Failed building wheel for habitat_sim
+61.30 ERROR: Failed to build installable wheels for some pyproject.toml based projects (habitat_sim)
+61.30 
+61.30 ERROR conda.cli.main_run:execute(127): `conda run /bin/bash -c cd ${PROJECTS_DIR}/habitat-sim &&     pip install . -v &&     conda install pytorch -c pytorch &&     pip install opencv-python tqdm` failed. (See above for error)
+61.30 
+------
+Dockerfile:44
+
+
+
+$SCENES_DIR/
+├──hm3d/: /nfs/gigantamax/home/data/datasets/HM3D/scene_datasets/hm3d
+├──gibson/: /nfs/gigantamax/home/data/datasets/Gibson/gibson
+├──habitat-test-scenes/: /nfs/gigantamax/home/data/datasets/HM3D/scene_datasets/habitat-test-scenes
+├──ReplicaCAD_baked_lighting/: /nfs/gigantamax/home/data/datasets/ReplicaCAD_baked_lighting
+└──scannet/: /nfs/thundurus/data/md0/shared_dataset/scannet
+
+
+
+Render the scenes in an output directory `$OUTPUT_DIR`
+```bash
+export METADATA_DIR="/nfs/gigantamax/home/data/datasets/Habitat-Sim-metadata"
+export SCENES_DIR="/nfs/wattrel/data/md0/yuhirata_files/data/dust3r/SCENES_DIR"
+export OUTPUT_DIR="data/habitat_processed"
+cd datasets_preprocess/habitat/
+export PYTHONPATH=$(pwd)
+# Print commandlines to generate images corresponding to each scene
+python preprocess_habitat.py --scenes_dir=$SCENES_DIR --metadata_dir=$METADATA_DIR --output_dir=$OUTPUT_DIR > output.txt
+# Launch these commandlines in parallel e.g. using GNU-Parallel as follows:
+python preprocess_habitat.py --scenes_dir=$SCENES_DIR --metadata_dir=$METADATA_DIR --output_dir=$OUTPUT_DIR | parallel -j 16
+```
+
+
+
+source /opt/conda/bin/activate
+conda activate habitat
+conda install -c conda-forge numpy=1.26.4 -y
+
+
+### Make a list of scenes
+
+```bash
+python find_scenes.py --root $OUTPUT_DIR
+```
