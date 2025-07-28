@@ -49,6 +49,17 @@ this error:
 Dockerfile:44
 
 
+Run on new Docker using habitat-README.md instruction
+
+CUDA_VISIBLE_DEVICES=0 EGL_DEVICE_ID=0 MAGNUM_HEADLESS=software python /nfs/wattrel/data/md0/yuhirata_files/data/dust3r/datasets_preprocess/habitat/preprocess_habitat.py --metadata_filename=/nfs/gigantamax/home/data/datasets/Habitat-Sim-metadata/5views_v1_512x512_metadata/habitat-test-scenes/apartment_1/metadata.json --metadata_dir=/nfs/gigantamax/home/data/datasets/Habitat-Sim-metadata --scenes_dir=/nfs/wattrel/data/md0/yuhirata_files/data/dust3r/SCENES_DIR --output_dir=data/habitat_processed/5views_v1_512x512_metadata/habitat-test-scenes/apartment_1
+
+
+didn't work: Platform::WindowlessEglApplication::tryCreateContext(): unable to find CUDA device 0 among 2 EGL devices in total
+
+
+-> Try running local computer!
+
+
 
 $SCENES_DIR/
 ├──hm3d/: /nfs/gigantamax/home/data/datasets/HM3D/scene_datasets/hm3d

@@ -14,6 +14,7 @@ RUN apt-get update && \
     libegl1-mesa-dev \
     libx11-dev \
     parallel \
+    libjpeg-dev libglm-dev libgl1-mesa-glx libegl1-mesa-dev mesa-utils xorg-dev freeglut3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Miniconda
@@ -32,29 +33,27 @@ RUN mkdir -p ${PROJECTS_DIR}
 RUN cd ${PROJECTS_DIR} &&\
     git clone --branch stable https://github.com/facebookresearch/habitat-sim.git
 
-# Accept Conda ToS, then create the environment in a single RUN command
+# Accept Conda ToS, then create the environment with newer CMake
 RUN conda config --set always_yes true && \
     conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
     conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r && \
     conda create -n habitat python=3.9 cmake=3.14.0
 
+# Install newer CMake and ninja from conda-forge
+RUN conda run -n habitat conda install -c conda-forge cmake>=3.20 ninja
 
-# Set the default shell to execute commands within the 'habitat' conda environment
+# Activate the conda environment
 SHELL ["conda", "run", "-n", "habitat", "/bin/bash", "-c"]
-RUN which cmake && cmake --version
 
-# Install all dependencies into the activated 'habitat' environment
-RUN pip install -U pip
-
-RUN which cmake && cmake --version \ 
-    pip install opencv-python tqdm && \
-    conda install pytorch -c pytorch -y && \
-    cd ${PROJECTS_DIR}/habitat-sim && \
+# Install habitat-sim with proper CMake flags and headless mode
+RUN cd ${PROJECTS_DIR}/habitat-sim && \
     pip install -r requirements.txt && \
-    python setup.py install --headless
+    python setup.py install --headless && \
+    conda install -c menpo opencv
+
 
 # Set the default working directory and command for when the container starts
-WORKDIR /habitat-sim
+WORKDIR /nfs/wattrel/data/md0/yuhirata_files/data/dust3r
 CMD ["/bin/bash"]
 
 # conda install -c conda-forge opencv   
