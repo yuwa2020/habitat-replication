@@ -7,5 +7,5 @@ python -m habitat_sim.utils.datasets_download --username 3663ec833567a9a9 --pass
 
 
 ```
-docker run --gpus all -it --rm -v /nfs/wattrel/data/md0/yuhirata_files/data/dust3r:/nfs/wattrel/data/md0/yuhirata_files/data/dust3r -v /nfs/gigantamax/home/data:/nfs/gigantamax/home/data dust3r
+docker run --gpus all -it --rm -v /nfs/wattrel/data/md0/yuhirata_files/data/dust3r:/nfs/wattrel/data/md0/yuhirata_files/data/dust3r -v /nfs/gigantamax/home/data:/nfs/gigantamax/home/data habitat
 ```
