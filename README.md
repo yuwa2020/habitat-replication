@@ -11,7 +11,7 @@ Reference: https://github.com/facebookresearch/habitat-sim?tab=readme-ov-file#in
 
 
 After that, I downloaded these two libraries 
-```
+```bash
 conda install pytorch -c pytorch
 pip install opencv-python tqdm
 ```
@@ -19,8 +19,8 @@ Reference: dust3r's habitat datasets_preprocess README: https://github.com/naver
 
 ## dust 3r Installation
 
-    Clone DUSt3R.
-```
+Clone DUSt3R.
+```bash
 git clone --recursive https://github.com/naver/dust3r
 cd dust3r
 ```
