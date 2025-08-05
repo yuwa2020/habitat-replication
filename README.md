@@ -28,7 +28,7 @@ cd dust3r
 
 # Rendering code setting
 
-```
+```bash
 export METADATA_DIR="/path/to/habitat/5views_v1_512x512_metadata"
 export SCENES_DIR="/path/to/habitat/data/scene_datasets/"
 export OUTPUT_DIR="data/habitat_processed"
@@ -42,7 +42,7 @@ python preprocess_habitat.py --scenes_dir=$SCENES_DIR --metadata_dir=$METADATA_D
 For our data folder path, I used the following directory path:
 ```bash
 export METADATA_DIR="/nfs/gigantamax/home/data/datasets/Habitat-Sim-metadata"
-export SCENES_DIR="/nfs/gigantamax/home/data/datasets/SCENES_DIR
+export SCENES_DIR="/nfs/gigantamax/home/data/datasets/SCENES_DIR"
 export OUTPUT_DIR="data/habitat_processed"
 cd datasets_preprocess/habitat/
 export PYTHONPATH=$(pwd)
