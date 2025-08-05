@@ -1,35 +1,33 @@
 # habitat-replication
 
-
+## Conda environment setting. 
+For habitat data download, I simply used this conda library to install packages
 ```
-python -m habitat_sim.utils.datasets_download --username 3663ec833567a9a9 --password 443c9d3c1653cb62e1d40196f345faad --uids hm3d_full --data-path ./
+conda install habitat-sim -c conda-forge -c aihabitat
 ```
+reference: https://github.com/facebookresearch/habitat-sim?tab=readme-ov-file#installation
+
+(Because my environment.yml is created on an M1 Mac laptop, I think downloading the package from the conda library is better)
 
 
+After that, I simply downloaded these two libraries (written on dust3r's README: https://github.com/naver/dust3r/tree/main/datasets_preprocess/habitat)
 ```
-docker run --gpus all -it --rm -v /nfs/wattrel/data/md0/yuhirata_files/data/dust3r:/nfs/wattrel/data/md0/yuhirata_files/data/dust3r -v /nfs/gigantamax/home/data:/nfs/gigantamax/home/data habitat
-```
-
-
-```
-python /nfs/wattrel/data/md0/yuhirata_files/data/dust3r/datasets_preprocess/habitat/preprocess_habitat.py --metadata_filename=/nfs/gigantamax/home/data/datasets/Habitat-Sim-metadata/5views_v1_512x512_metadata/habitat-test-scenes/skokloster-castle/metadata.json --metadata_dir=/nfs/gigantamax/home/data/datasets/Habitat-Sim-metadata --scenes_dir=/nfs/wattrel/data/md0/yuhirata_files/data/dust3r/SCENES_DIR --output_dir=data/habitat_processed/5views_v1_512x512_metadata/habitat-test-scenes/skokloster-castle
-```
-
-
-
-
-```
-python /nfs/wattrel/data/md0/yuhirata_files/data/dust3r/datasets_preprocess/habitat/preprocess_habitat.py --metadata_filename=/nfs/gigantamax/home/data/datasets/Habitat-Sim-metadata/5views_v1_512x512_metadata/habitat-test-scenes/skokloster-castle/metadata.json --metadata_dir=/nfs/gigantamax/home/data/datasets/Habitat-Sim-metadata --scenes_dir=/nfs/wattrel/data/md0/yuhirata_files/data/dust3r/SCENES_DIR --output_dir=data/habitat_processed/5views_v1_512x512_metadata/habitat-test-scenes/skokloster-castle
+conda install pytorch -c pytorch
+pip install opencv-python tqdm
+Then run this code to render the scenes
 ```
 
 
-```
-rclone copy IU_OneDrive_root:1-GRADUATE-SCHOOL-DATA/10-Research-Assistanship/3D-reconstruction/2025-07-29/data/datasets/Habitat-Sim-metadata/5views_v1_512x512_metadata/habitat-test-scenes Documents/dust3r/data/datasets/Habitat-Sim-metadata/5views_v1_512x512_metadata/habitat-test-scenes
-``` 
-
+# Rendering code setting
 
 ```
-rclone copy IU_OneDrive_root:1-GRADUATE-SCHOOL-DATA/10-Research-Assistanship/3D-reconstruction/2025-07-29/data/datasets/Habitat-Sim-metadata Documents/dust3r/data/datasets/Habitat-Sim-metadata
+export METADATA_DIR="/path/to/habitat/5views_v1_512x512_metadata"
+export SCENES_DIR="/path/to/habitat/data/scene_datasets/"
+export OUTPUT_DIR="data/habitat_processed"
+cd datasets_preprocess/habitat/
+export PYTHONPATH=$(pwd)
+# Print commandlines to generate images corresponding to each scene
+python preprocess_habitat.py --scenes_dir=$SCENES_DIR --metadata_dir=$METADATA_DIR --output_dir=$OUTPUT_DIR
+# Launch these commandlines in parallel e.g. using GNU-Parallel as follows:
+python preprocess_habitat.py --scenes_dir=$SCENES_DIR --metadata_dir=$METADATA_DIR --output_dir=$OUTPUT_DIR | parallel -j 16
 ```
-
-
