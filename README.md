@@ -17,6 +17,14 @@ pip install opencv-python tqdm
 ```
 Reference: dust3r's habitat datasets_preprocess README: https://github.com/naver/dust3r/tree/main/datasets_preprocess/habitat
 
+## dust 3r Installation
+
+    Clone DUSt3R.
+```
+git clone --recursive https://github.com/naver/dust3r
+cd dust3r
+```
+
 
 # Rendering code setting
 
@@ -32,7 +40,6 @@ python preprocess_habitat.py --scenes_dir=$SCENES_DIR --metadata_dir=$METADATA_D
 python preprocess_habitat.py --scenes_dir=$SCENES_DIR --metadata_dir=$METADATA_DIR --output_dir=$OUTPUT_DIR | parallel -j 16
 ```
 For our data folder path, I used the following directory path:
-```
 ```bash
 export METADATA_DIR="/nfs/gigantamax/home/data/datasets/Habitat-Sim-metadata"
 export SCENES_DIR="/nfs/gigantamax/home/data/datasets/SCENES_DIR
